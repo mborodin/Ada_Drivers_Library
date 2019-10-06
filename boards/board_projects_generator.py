@@ -6,6 +6,7 @@ from subprocess import check_call
 BOARDS = {
     'Crazyflie':           { 'rts_profiles': ['ravenscar-sfp', 'ravenscar-full']},
     'HiFive1':             { 'rts_profiles': ['zfp']},
+    'Unleashed':           { 'rts_profiles': ['zfp', 'ravenscar-sfp', 'ravenscar-full']},
     'MicroBit':            { 'rts_profiles': ['zfp']},
     'Native':              { 'rts_profiles': ['none']},
     'OpenMV2':             { 'rts_profiles': ['ravenscar-sfp', 'ravenscar-full']},
@@ -20,6 +21,7 @@ BOARDS = {
 
 FOLDERS = {'Crazyflie': 'crazyflie',
            'HiFive1': 'HiFive1',
+           'Unleashed': 'Unleashed',
            'MicroBit': 'MicroBit',
            'Native': 'native',
            'OpenMV2': 'OpenMV2',
@@ -30,6 +32,7 @@ FOLDERS = {'Crazyflie': 'crazyflie',
            'STM32F769_Discovery': 'stm32f769_discovery',
            'NUCLEO_F446ZE':       'nucleo_f446ze'}
 
+USE_STARTUP_GEN = ['HiFive1', 'MicroBit']
 
 def gen_project(board_name, rts):
     assert board_name is not None, "board is undefined"
@@ -63,7 +66,8 @@ def gen_project(board_name, rts):
             "-s", source_dir_name,
             "-o", object_dir_name,
             "Board=%s" % board_name,
-            "Runtime_Profile=%s" % rts]
+            "Runtime_Profile=%s" % rts,
+            "Use_Startup_Gen=" + ("True" if board_name in USE_STARTUP_GEN else "False")]
     check_call(args)
 
 

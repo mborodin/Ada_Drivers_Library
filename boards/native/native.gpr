@@ -45,11 +45,13 @@ library project Native is
         Build_Checks_Switches &
         ("-g",       -- Debug info
          "-gnatwa",  -- All warnings
+         "-gnatw_A", -- Turn off warnings for anonymous allocators
          "-gnatQ",   -- Don't quit. Generate ALI and tree files even if illegalities
          "-gnatw.X", -- Disable warnings for No_Exception_Propagation
          "-ffunction-sections", -- Create a linker section for each function
          "-fdata-sections");  -- Create a linker section for each data
    end Compiler;
+
 
    for Languages use ("Ada");
    for Create_Missing_Dirs use "True";
@@ -58,12 +60,15 @@ library project Native is
    for Library_Kind use "static";
    for Library_Name use "ada_drivers_library";
 
+   Linker_Switches := ();
+
    Max_Mount_Points               := "2";                 -- From default value
    Max_Mount_Name_Length          := "128";               -- From default value
    Has_Ravenscar_Full_Runtime     := "False";             -- From default value
    Board                          := "Native";            -- From command line
    Has_ZFP_Runtime                := "False";             -- From default value
    Has_Ravenscar_SFP_Runtime      := "False";             -- From default value
+   Use_Startup_Gen                := "False";             -- From command line
    Max_Path_Length                := "1024";              -- From default value
    Architecture                   := "Native";            -- From board definition
 
@@ -80,6 +85,7 @@ library project Native is
     Src_Dirs_Root & "/middleware/src/bitmap", -- From middleware config
     Src_Dirs_Root & "/middleware/src/command_line", -- From middleware config
     Src_Dirs_Root & "/middleware/src/sdmmc", -- From middleware config
+    Src_Dirs_Root & "/middleware/src/neopixel", -- From middleware config
     Src_Dirs_Root & "/components/src/**", -- From components config
      "config_src/");
 end Native;

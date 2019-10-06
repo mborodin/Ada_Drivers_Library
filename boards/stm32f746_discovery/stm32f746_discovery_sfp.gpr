@@ -45,11 +45,13 @@ library project STM32F746_Discovery_SFP is
         Build_Checks_Switches &
         ("-g",       -- Debug info
          "-gnatwa",  -- All warnings
+         "-gnatw_A", -- Turn off warnings for anonymous allocators
          "-gnatQ",   -- Don't quit. Generate ALI and tree files even if illegalities
          "-gnatw.X", -- Disable warnings for No_Exception_Propagation
          "-ffunction-sections", -- Create a linker section for each function
          "-fdata-sections");  -- Create a linker section for each data
    end Compiler;
+
 
    for Languages use ("Ada");
    for Create_Missing_Dirs use "True";
@@ -57,8 +59,15 @@ library project STM32F746_Discovery_SFP is
    for Library_Dir use "obj/sfp_lib_" & Build;
    for Library_Kind use "static";
    for Library_Name use "ada_drivers_library";
+
+   Linker_Switches := ();
    for Target use "arm-eabi";
    for Runtime ("Ada") use "ravenscar-sfp-stm32f746disco";
+
+   package Device_Configuration is
+      for CPU_Name use "ARM Cortex-M7F";
+      for Number_Of_Interrupts use "0";
+   end Device_Configuration;
 
    Vendor                         := "STMicro";           -- From board definition
    Max_Mount_Points               := "2";                 -- From default value
@@ -66,13 +75,15 @@ library project STM32F746_Discovery_SFP is
    Runtime_Profile                := "ravenscar-sfp";     -- From command line
    Device_Name                    := "STM32F746NGHx";     -- From board definition
    Device_Family                  := "STM32F7";           -- From board definition
+   Has_Ravenscar_SFP_Runtime      := "True";              -- From board definition
    Runtime_Name                   := "ravenscar-sfp-stm32f746disco"; -- From default value
    Has_Ravenscar_Full_Runtime     := "True";              -- From board definition
    CPU_Core                       := "ARM Cortex-M7F";    -- From mcu definition
    Board                          := "STM32F746_Discovery"; -- From command line
    Has_ZFP_Runtime                := "False";             -- From board definition
-   Has_Ravenscar_SFP_Runtime      := "True";              -- From board definition
+   Number_Of_Interrupts           := "0";                 -- From default value
    High_Speed_External_Clock      := "25000000";          -- From board definition
+   Use_Startup_Gen                := "False";             -- From command line
    Max_Path_Length                := "1024";              -- From default value
    Runtime_Name_Suffix            := "stm32f746disco";    -- From board definition
    Architecture                   := "ARM";               -- From board definition
@@ -113,6 +124,7 @@ library project STM32F746_Discovery_SFP is
     Src_Dirs_Root & "/middleware/src/bitmap", -- From middleware config
     Src_Dirs_Root & "/middleware/src/command_line", -- From middleware config
     Src_Dirs_Root & "/middleware/src/sdmmc", -- From middleware config
+    Src_Dirs_Root & "/middleware/src/neopixel", -- From middleware config
     Src_Dirs_Root & "/middleware/src/ravenscar-common", -- From middleware config
     Src_Dirs_Root & "/components/src/**", -- From components config
      "src/sfp/");

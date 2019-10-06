@@ -29,6 +29,8 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
+with nRF51.GPIO; use nRF51.GPIO;
+
 package MicroBit.IOs is
 
    type Pin_Id is range 0 .. 20;
@@ -65,5 +67,32 @@ package MicroBit.IOs is
    function Analog (Pin : Pin_Id) return Analog_Value
      with Pre => Supports (Pin, Analog);
    --  Read the voltagle applied to the pin. 0 means 0V 1023 means 3.3V
+
+private
+
+   --  Mapping between pin id and GPIO_Points
+
+   Points : array (Pin_Id) of GPIO_Point :=
+     (0  => MB_P0,
+      1  => MB_P1,
+      2  => MB_P2,
+      3  => MB_P3,
+      4  => MB_P4,
+      5  => MB_P5,
+      6  => MB_P6,
+      7  => MB_P7,
+      8  => MB_P8,
+      9  => MB_P9,
+      10 => MB_P10,
+      11 => MB_P11,
+      12 => MB_P12,
+      13 => MB_P13,
+      14 => MB_P14,
+      15 => MB_P15,
+      16 => MB_P16,
+      17 => MB_P0,  --  There's no pin17, using P0 to fill in...
+      18 => MB_P0,  --  There's no pin18, using P0 to fill in...
+      19 => MB_P19,
+      20 => MB_P20);
 
 end MicroBit.IOs;
